@@ -69,40 +69,47 @@ class Game extends React.Component {
                 squares: Array(9).fill(null),
             },
         ],
+        stepNumber: 0,
     };
 
-    getPlayer({move = this.state.history.length - 1} = {}) {
-        return move % 2 === 0 ? 'X' : 'O';
+    getPlayer() {
+        return this.state.stepNumber % 2 === 0 ? 'X' : 'O';
+    }
+
+    getCurrent() {
+        return this.state.history[this.state.stepNumber];
     }
 
     handleClick(i) {
-        const history = this.state.history;
-        const current = history[history.length - 1];
-
+        const current = this.getCurrent();
         if (current.squares[i] || calculateWinner(current.squares)) {
             return;
         }
 
+        const {stepNumber} = this.state;
+        const history = this.state.history.slice(0, stepNumber + 1);
+
         const squares = [...current.squares];
-        squares[i] = this.getPlayer({move: history.length - 1});
+        squares[i] = this.getPlayer();
 
         this.setState({
             history: [
                 ...history,
                 {squares},
             ],
+            stepNumber: stepNumber + 1,
         });
     }
 
-    goToStep(move) {
+    goToStep(stepNumber) {
         this.setState({
-            history: this.state.history.slice(0, move + 1),
+            stepNumber,
         })
     }
 
     render() {
         const history = this.state.history;
-        const current = history[history.length - 1];
+        const current = this.getCurrent();
         const squares = current.squares;
         const winner = calculateWinner(squares);
         const player = this.getPlayer();
@@ -117,7 +124,6 @@ class Game extends React.Component {
         }
 
         const moves = history
-            .filter((_, move) => move < history.length - 1)
             .map((step, move) => {
                 const desc = move ? `Go to step #${ move + 1 }` : 'Start again';
                 return (
