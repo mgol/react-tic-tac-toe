@@ -30,7 +30,7 @@ const Square = props => (
     </button>
 );
 
-class Board extends React.Component {
+class Board extends React.PureComponent {
     renderSquare(i) {
         return (
             <Square
@@ -62,7 +62,7 @@ class Board extends React.Component {
     }
 }
 
-class Game extends React.Component {
+class Game extends React.PureComponent {
     state = {
         history: [
             {
