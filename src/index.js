@@ -108,7 +108,7 @@ class Game extends React.PureComponent {
     goToStep(stepNumber) {
         this.setState({
             stepNumber,
-        })
+        });
     }
 
     render() {
