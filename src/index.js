@@ -64,38 +64,37 @@ class Board extends React.PureComponent {
 
 class Game extends React.PureComponent {
     state = {
-        history: [
-            {
-                squares: Array(9).fill(null),
-            },
-        ],
+        moves: [],
         stepNumber: 0,
     };
 
-    getPlayer() {
-        return this.state.stepNumber % 2 === 0 ? 'X' : 'O';
+    getPlayer({stepNumber = this.state.stepNumber} = {}) {
+        return stepNumber % 2 === 0 ? 'X' : 'O';
     }
 
-    getCurrent() {
-        return this.state.history[this.state.stepNumber];
+    getSquares() {
+        return this.state.moves
+            .reduce((squares, move, stepNumber) => {
+                if (stepNumber < this.state.stepNumber) {
+                    squares[move] = this.getPlayer({stepNumber});
+                }
+                return squares;
+            }, Array(9).fill(null));
     }
 
     handleClick(i) {
-        const current = this.getCurrent();
-        if (current.squares[i] || calculateWinner(current.squares)) {
+        const squares = this.getSquares();
+        if (squares[i] || calculateWinner(squares)) {
             return;
         }
 
         const {stepNumber} = this.state;
-        const history = this.state.history.slice(0, stepNumber + 1);
-
-        const squares = [...current.squares];
-        squares[i] = this.getPlayer();
+        const moves = this.state.moves.slice(0, stepNumber);
 
         this.setState({
-            history: [
-                ...history,
-                {squares},
+            moves: [
+                ...moves,
+                i,
             ],
             stepNumber: stepNumber + 1,
         });
@@ -108,9 +107,8 @@ class Game extends React.PureComponent {
     }
 
     render() {
-        const history = this.state.history;
-        const current = this.getCurrent();
-        const squares = current.squares;
+        const moves = this.state.moves;
+        const squares = this.getSquares();
         const winner = calculateWinner(squares);
         const player = this.getPlayer();
 
@@ -123,13 +121,13 @@ class Game extends React.PureComponent {
             status = `Next player: ${ player }`;
         }
 
-        const moves = history
-            .map((step, move) => {
-                const desc = move ? `Go to step #${ move + 1 }` : 'Start again';
+        const history = [...moves, null]
+            .map((move, step) => {
+                const desc = step ? `Go to step #${ step }` : 'Start again';
                 return (
-                    <li key={move}>
+                    <li key={step}>
                         <button
-                            onClick={() => this.goToStep(move)}
+                            onClick={() => this.goToStep(step)}
                         >{desc}</button>
                     </li>
                 );
@@ -145,7 +143,7 @@ class Game extends React.PureComponent {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <ol>{history}</ol>
                 </div>
             </div>
         );
