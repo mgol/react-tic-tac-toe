@@ -17,9 +17,14 @@ const calculateWinner = squares => {
     for (const line of lines) {
         const [a, b, c] = line;
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return {
+                winner: squares[a],
+                winningSquares: new Set(line),
+            };
         }
     }
+
+    return {winner: null, winningSquares: new Set()};
 };
 
 const getRowCol = move => ({
@@ -29,7 +34,7 @@ const getRowCol = move => ({
 
 const Square = props => (
     <button
-        className="square"
+        className={`square ${ props.highlighted ? 'square-highlighted' : '' }`}
         onClick={props.onClick}>
         {props.value}
     </button>
@@ -40,12 +45,16 @@ const Board = props => (
         [0, 1, 2].map(row =>
             <div key={row}
                  className="board-row">{
-                [0, 1, 2].map(col =>
-                    <Square
-                        key={col}
-                        value={props.squares[3 * row + col]}
-                        onClick={() => props.onClick(3 * row + col)}/>,
-                )
+                [0, 1, 2].map(col => {
+                    const squareNo = 3 * row + col;
+                    return (
+                        <Square
+                            key={col}
+                            value={props.squares[squareNo]}
+                            highlighted={props.winningSquares.has(squareNo)}
+                            onClick={() => props.onClick(squareNo)}/>
+                    );
+                })
             }</div>,
         )
     }</>
@@ -74,7 +83,7 @@ class Game extends React.PureComponent {
 
     handleClick(i) {
         const squares = this.getSquares();
-        if (squares[i] || calculateWinner(squares)) {
+        if (squares[i] || calculateWinner(squares).winner) {
             return;
         }
 
@@ -105,7 +114,7 @@ class Game extends React.PureComponent {
     render() {
         const {moves, stepNumber, newestStepsOnBottom} = this.state;
         const squares = this.getSquares();
-        const winner = calculateWinner(squares);
+        const {winner, winningSquares} = calculateWinner(squares);
         const player = this.getPlayer();
 
         let status;
@@ -142,6 +151,7 @@ class Game extends React.PureComponent {
                 <div className="game-board">
                     <Board
                         squares={squares}
+                        winningSquares={winningSquares}
                         onClick={i => this.handleClick(i)}
                     />
                 </div>

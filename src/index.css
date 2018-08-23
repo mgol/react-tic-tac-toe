@@ -36,6 +36,12 @@ ol, ul {
     outline: none;
 }
 
+.square-highlighted {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
 .kbd-navigation .square:focus {
     background: #ddd;
 }
