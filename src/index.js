@@ -55,6 +55,7 @@ class Game extends React.PureComponent {
     state = {
         moves: [],
         stepNumber: 0,
+        newestStepsOnBottom: true,
     };
 
     getPlayer({stepNumber = this.state.stepNumber} = {}) {
@@ -95,8 +96,14 @@ class Game extends React.PureComponent {
         });
     }
 
+    toggleStepsOrder() {
+        this.setState(({newestStepsOnBottom}) => ({
+            newestStepsOnBottom: !newestStepsOnBottom,
+        }))
+    }
+
     render() {
-        const {moves, stepNumber} = this.state;
+        const {moves, stepNumber, newestStepsOnBottom} = this.state;
         const squares = this.getSquares();
         const winner = calculateWinner(squares);
         const player = this.getPlayer();
@@ -110,7 +117,7 @@ class Game extends React.PureComponent {
             status = `Next player: ${ player }`;
         }
 
-        const history = [...moves, null]
+        let history = [...moves, null]
             .map((move, step) => {
                 const desc = step ? `Go to step #${ step }` : 'Start again';
                 const stepPlayer = this.getPlayer({stepNumber: step});
@@ -126,6 +133,10 @@ class Game extends React.PureComponent {
                 );
             });
 
+        if (!newestStepsOnBottom) {
+            history = history.reverse();
+        }
+
         return (
             <div className="game">
                 <div className="game-board">
@@ -135,8 +146,14 @@ class Game extends React.PureComponent {
                     />
                 </div>
                 <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{history}</ol>
+                    <div>
+                        {status}
+                        <button
+                            className="steps-order-toggle"
+                            onClick={() => this.toggleStepsOrder()}
+                        >Toggle steps order</button>
+                    </div>
+                    <ol reversed={newestStepsOnBottom ? undefined : 'reversed'}>{history}</ol>
                 </div>
             </div>
         );
