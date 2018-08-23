@@ -22,6 +22,11 @@ const calculateWinner = squares => {
     }
 };
 
+const getRowCol = move => ({
+    col: move % 3,
+    row: Math.floor(move / 3),
+});
+
 const Square = props => (
     <button
         className="square"
@@ -107,7 +112,7 @@ class Game extends React.PureComponent {
     }
 
     render() {
-        const moves = this.state.moves;
+        const {moves, stepNumber} = this.state;
         const squares = this.getSquares();
         const winner = calculateWinner(squares);
         const player = this.getPlayer();
@@ -124,11 +129,14 @@ class Game extends React.PureComponent {
         const history = [...moves, null]
             .map((move, step) => {
                 const desc = step ? `Go to step #${ step }` : 'Start again';
+                const {row, col} = move == null ? {} : getRowCol(move);
                 return (
                     <li key={step}>
                         <button
+                            className={`step-button ${ step === stepNumber ? 'current-step-button' : '' }`}
                             onClick={() => this.goToStep(step)}
                         >{desc}</button>
+                        {move == null ? '' : <span>r: {row + 1}, c: {col + 1}</span>}
                     </li>
                 );
             });
