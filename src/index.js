@@ -137,7 +137,7 @@ class Game extends React.PureComponent {
                             className={`step-button ${ stepNumber === stepNumber ? 'current-step-button' : '' }`}
                             onClick={() => this.goToStep(stepNumber)}
                         >{desc}</button>
-                        {move == null ? '' : <span>row: {row + 1}, column: {col + 1}, player: {stepPlayer}</span>}
+                        {move == null ? '' : <span>({col + 1}, {row + 1}) player: {stepPlayer}</span>}
                     </li>
                 );
             });
