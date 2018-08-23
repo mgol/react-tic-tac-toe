@@ -111,15 +111,15 @@ class Game extends React.PureComponent {
         }
 
         const history = [...moves, null]
-            .map((move, stepNumber) => {
-                const desc = stepNumber ? `Go to step #${ stepNumber }` : 'Start again';
-                const stepPlayer = this.getPlayer({stepNumber});
+            .map((move, step) => {
+                const desc = step ? `Go to step #${ step }` : 'Start again';
+                const stepPlayer = this.getPlayer({stepNumber: step});
                 const {row, col} = move == null ? {} : getRowCol(move);
                 return (
-                    <li key={stepNumber}>
+                    <li key={step}>
                         <button
-                            className={`step-button ${ stepNumber === stepNumber ? 'current-step-button' : '' }`}
-                            onClick={() => this.goToStep(stepNumber)}
+                            className={`step-button ${ step === stepNumber ? 'current-step-button' : '' }`}
+                            onClick={() => this.goToStep(step)}
                         >{desc}</button>
                         {move == null ? '' : <span>({col + 1}, {row + 1}) player: {stepPlayer}</span>}
                     </li>
