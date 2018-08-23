@@ -35,37 +35,21 @@ const Square = props => (
     </button>
 );
 
-class Board extends React.PureComponent {
-    renderSquare(i) {
-        return (
-            <Square
-                value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}/>
-        );
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
-    }
-}
+const Board = props => (
+    <>{
+        [0, 1, 2].map(row =>
+            <div key={row}
+                 className="board-row">{
+                [0, 1, 2].map(col =>
+                    <Square
+                        key={col}
+                        value={props.squares[3 * row + col]}
+                        onClick={() => props.onClick(3 * row + col)}/>,
+                )
+            }</div>,
+        )
+    }</>
+);
 
 class Game extends React.PureComponent {
     state = {
