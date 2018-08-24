@@ -67,11 +67,11 @@ class Game extends React.PureComponent {
         newestStepsOnBottom: true,
     };
 
-    getPlayer({stepNumber = this.state.stepNumber} = {}) {
+    getPlayer = ({stepNumber = this.state.stepNumber} = {}) => {
         return stepNumber % 2 === 0 ? 'X' : 'O';
-    }
+    };
 
-    getSquares() {
+    getSquares = () => {
         return this.state.moves
             .reduce((squares, move, stepNumber) => {
                 if (stepNumber < this.state.stepNumber) {
@@ -79,9 +79,9 @@ class Game extends React.PureComponent {
                 }
                 return squares;
             }, Array(9).fill(null));
-    }
+    };
 
-    handleClick(i) {
+    handleClick = (i) => {
         const squares = this.getSquares();
         if (squares[i] || calculateWinner(squares).winner) {
             return;
@@ -97,19 +97,19 @@ class Game extends React.PureComponent {
             ],
             stepNumber: stepNumber + 1,
         });
-    }
+    };
 
-    goToStep(stepNumber) {
+    goToStep = stepNumber => {
         this.setState({
             stepNumber,
         });
-    }
+    };
 
-    toggleStepsOrder() {
+    toggleStepsOrder = () => {
         this.setState(({newestStepsOnBottom}) => ({
             newestStepsOnBottom: !newestStepsOnBottom,
-        }))
-    }
+        }));
+    };
 
     render() {
         const {moves, stepNumber, newestStepsOnBottom} = this.state;
@@ -160,8 +160,9 @@ class Game extends React.PureComponent {
                         {status}
                         <button
                             className="steps-order-toggle"
-                            onClick={() => this.toggleStepsOrder()}
-                        >Toggle steps order</button>
+                            onClick={this.toggleStepsOrder}
+                        >Toggle steps order
+                        </button>
                     </div>
                     <ol reversed={newestStepsOnBottom ? undefined : 'reversed'}>{history}</ol>
                 </div>
