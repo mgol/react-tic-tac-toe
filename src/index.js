@@ -32,33 +32,83 @@ const getRowCol = move => ({
     row: Math.floor(move / 3),
 });
 
-const Square = props => (
-    <button
-        className={`square ${ props.highlighted ? 'square-highlighted' : '' }`}
-        onClick={props.onClick}>
-        {props.value}
-    </button>
-);
+class Square extends React.PureComponent {
+    state = {};
 
-const Board = props => (
-    <>{
-        [0, 1, 2].map(row =>
-            <div key={row}
-                 className="board-row">{
-                [0, 1, 2].map(col => {
-                    const squareNo = 3 * row + col;
-                    return (
-                        <Square
-                            key={col}
-                            value={props.squares[squareNo]}
-                            highlighted={props.winningSquares.has(squareNo)}
-                            onClick={() => props.onClick(squareNo)}/>
-                    );
-                })
-            }</div>,
-        )
-    }</>
-);
+    static getDerivedStateFromProps() {
+        console.log('Square getDerivedStateFromProps');
+        return null;
+    }
+
+    getSnapshotBeforeUpdate() {
+        console.log('Square getSnapshotBeforeUpdate');
+        return null;
+    }
+
+    componentDidMount() {
+        console.log('Square componentDidMount');
+    }
+
+    componentDidUpdate() {
+        console.log('Square componentDidUpdate');
+    }
+
+    render() {
+        console.log('Square render');
+        return (
+            <button
+                className={`square ${ this.props.highlighted ? 'square-highlighted' : '' }`}
+                onClick={this.props.onClick}>
+                {this.props.value}
+            </button>
+        );
+    }
+}
+
+class Board extends React.PureComponent {
+    state = {};
+
+    static getDerivedStateFromProps() {
+        console.log('Board getDerivedStateFromProps');
+        return null;
+    }
+
+    getSnapshotBeforeUpdate() {
+        console.log('Board getSnapshotBeforeUpdate');
+        return null;
+    }
+
+    componentDidMount() {
+        console.log('Board componentDidMount');
+    }
+
+    componentDidUpdate() {
+        console.log('Board componentDidUpdate');
+    }
+
+    render() {
+        console.log('Board render');
+        return (
+            <>{
+                [0, 1, 2].map(row =>
+                    <div key={row}
+                         className="board-row">{
+                        [0, 1, 2].map(col => {
+                            const squareNo = 3 * row + col;
+                            return (
+                                <Square
+                                    key={col}
+                                    value={this.props.squares[squareNo]}
+                                    highlighted={this.props.winningSquares.has(squareNo)}
+                                    onClick={() => this.props.onClick(squareNo)}/>
+                            );
+                        })
+                    }</div>,
+                )
+            }</>
+        );
+    }
+}
 
 class Game extends React.PureComponent {
     state = {
