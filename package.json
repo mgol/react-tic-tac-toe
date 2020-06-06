@@ -2,10 +2,10 @@
   "name": "react-tic-tac-toe",
   "private": true,
   "dependencies": {
-    "react": "16.8.1",
-    "react-devtools": "3.6.0",
-    "react-dom": "16.8.1",
-    "react-scripts": "2.1.4"
+    "react": "16.13.1",
+    "react-devtools": "4.7.0",
+    "react-dom": "16.13.1",
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
